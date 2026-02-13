@@ -1,0 +1,18 @@
+{
+  "name": "campaign-api-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Campaign Management Assessment",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "keywords": ["api", "express", "campaign"],
+  "author": "Johnson Group",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-core-validator": "^1.0.0",
+    "cors": "^2.8.5"
+  }
+}

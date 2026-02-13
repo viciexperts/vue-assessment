@@ -1,0 +1,8 @@
+# This directory is for reusable Vue components
+# Create components like:
+# - Button.vue
+# - Input.vue
+# - Card.vue
+# - LoadingSpinner.vue
+# - ErrorMessage.vue
+# etc.
