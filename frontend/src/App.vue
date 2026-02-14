@@ -23,7 +23,7 @@
 
     <footer class="footer">
       <div class="container footer-inner">
-        <span class="muted">Local API: http://localhost:3000</span>
+        <!-- <span class="muted">Local API: http://localhost:3000</span> -->
       </div>
     </footer>
   </div>
