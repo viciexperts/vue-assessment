@@ -45,6 +45,10 @@ const badgeClass = computed(() => {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.06);
   user-select: none;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%);
+  color: var(--text);
+
 }
 
 .dot {
