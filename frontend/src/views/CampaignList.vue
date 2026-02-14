@@ -3,7 +3,9 @@
     <div class="container">
       <header class="page-header">
         <div>
-          <h2 class="title">Campaigns</h2>
+          <h2 ref="titleRef" class="title" tabindex="-1">
+            Campaigns
+          </h2>
           <p class="subtitle">View performance and manage your marketing campaigns.</p>
         </div>
 
@@ -167,6 +169,10 @@
 </template>
 
 <script setup>
+
+import { useRouteFocus } from '../composables/useRouteFocus';
+
+
 import { getErrorMessage } from '../utils/error';
 
 import { computed, onMounted, ref, watch } from 'vue';
@@ -179,6 +185,10 @@ import BaseSpinner from '../components/BaseSpinner.vue';
 import ErrorAlert from '../components/ErrorAlert.vue';
 import StatusBadge from '../components/StatusBadge.vue';
 import PaginationControls from '../components/PaginationControls.vue';
+
+const titleRef = ref(null);
+
+useRouteFocus(() => titleRef.value);
 
 const store = useCampaignsStore();
 const route = useRoute();

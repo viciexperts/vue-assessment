@@ -159,4 +159,16 @@
   font-size: 13px;
   color: var(--app-muted);
 }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+  background: var(--surface);
+  padding: 8px 12px;
+  z-index: 1000;
+}
 </style>

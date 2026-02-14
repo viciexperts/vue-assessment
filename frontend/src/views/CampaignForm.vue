@@ -3,7 +3,10 @@
     <div class="container">
       <header class="page-header">
         <button type="button" class="btn btn-ghost" @click="goBack">← Back</button>
-        <h2 class="title">{{ isEdit ? 'Edit Campaign' : 'Create Campaign' }}</h2>
+        <h2 ref="titleRef" class="title" tabindex="-1">
+          {{ isEdit ? 'Edit Campaign' : 'Create Campaign' }}
+        </h2>
+
       </header>
 
       <ErrorAlert
@@ -186,6 +189,7 @@
 <script setup>
 import { getErrorMessage } from '../utils/error';
 import SkeletonBlock from '../components/SkeletonBlock.vue';
+import { useRouteFocus } from '@/composables/useRouteFocus';
 
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -204,7 +208,9 @@ const isEdit = computed(() => Boolean(route.params.id));
 // Track which campaign id has been loaded into the form. Until it matches routeId, show skeleton.
 const loadedId = ref(null);
 const loadingEdit = computed(() => isEdit.value && loadedId.value !== routeId.value);
+const titleRef = ref(null);
 
+useRouteFocus(() => titleRef.value);
 
 const nameRef = ref(null);
 
