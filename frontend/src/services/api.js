@@ -41,7 +41,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// Example: Campaign API service
-// TODO: Create services/campaignService.js for campaign-specific API calls
-// You can import this api instance there
