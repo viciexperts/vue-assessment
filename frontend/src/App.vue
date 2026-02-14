@@ -12,7 +12,14 @@
 
         <nav class="nav" aria-label="Primary navigation">
           <router-link class="nav-link" to="/">Campaigns</router-link>
-          <router-link class="nav-link" to="/campaigns/new">Create</router-link>
+          <RouterLink
+              v-if="showCreate"
+              :to="{ name: 'campaign-create' }"
+              class="btn"
+          >
+            Create
+          </RouterLink>
+
         </nav>
       </div>
     </header>
@@ -29,7 +36,17 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed } from 'vue'
+
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+// Hide Create when editing
+const showCreate = computed(() => route.name !== 'campaign-edit')
+
+</script>
 
 <style scoped>
 /* Theme tokens (light by default) */
