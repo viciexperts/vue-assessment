@@ -9,7 +9,7 @@
 
       </header>
 
-      <div class="toolbar" role="search">
+      <form class="toolbar" role="search" @submit.prevent>
         <div class="search">
           <label class="sr-only" for="campaign-search">Search campaigns</label>
           <input
@@ -32,7 +32,7 @@
             <option value="draft">Draft</option>
           </select>
         </div>
-      </div>
+      </form>
 
       <div v-if="showCreatedBanner" class="banner" role="status" aria-live="polite">
         Campaign created successfully.

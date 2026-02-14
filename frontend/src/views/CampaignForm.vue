@@ -1,5 +1,5 @@
 <template>
-  <section class="campaign-form">
+  <section class="campaign-form" :aria-busy="loadingEdit ? 'true' : 'false'">
     <div class="container">
       <header class="page-header">
         <button type="button" class="btn btn-ghost" @click="goBack">← Back</button>
@@ -18,7 +18,7 @@
         </template>
       </ErrorAlert>
 
-      <div v-if="loadingEdit" class="form-skeleton" aria-label="Loading campaign form">
+      <div v-if="loadingEdit" class="form-skeleton" aria-label="Loading campaign form"  aria-live="polite">
         <div class="form-skeleton-grid">
           <div class="fs-field">
             <SkeletonBlock height="12px" width="90px" />
