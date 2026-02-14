@@ -174,8 +174,66 @@ let campaigns = [
     history: []
   }
 ];
+// --- Add 30 more campaigns (IDs 6–35) ---
+const statuses = ['active', 'paused', 'draft', 'completed'];
+const audiences = [
+  '18-35, US',
+  '25-54, US, Canada',
+  '18-45, Global',
+  '22-40, US, EU',
+  'All demographics, Global'
+];
 
-let nextId = 6;
+const baseDate = new Date('2024-01-01');
+
+const extraCampaigns = Array.from({ length: 30 }, (_, i) => {
+  const id = i + 6;
+  const budget = 20000 + Math.floor(Math.random() * 80000);
+  const spent = Math.floor(Math.random() * budget);
+  const impressions = 20000 + Math.floor(Math.random() * 200000);
+  const clicks = Math.floor(impressions * (0.02 + Math.random() * 0.03));
+  const conversions = Math.floor(clicks * (0.03 + Math.random() * 0.07));
+
+  const start = new Date(baseDate);
+  start.setDate(start.getDate() + id * 3);
+
+  const end = new Date(start);
+  end.setDate(end.getDate() + 30);
+
+  return {
+    id: id.toString(),
+    name: `Campaign ${id}`,
+    status: statuses[id % statuses.length],
+    budget,
+    spent,
+    startDate: start.toISOString().slice(0, 10),
+    endDate: end.toISOString().slice(0, 10),
+    description: `Marketing campaign number ${id}`,
+    targetAudience: audiences[id % audiences.length],
+    createdAt: start.toISOString(),
+    updatedAt: end.toISOString(),
+    metrics: {
+      impressions,
+      clicks,
+      conversions,
+      ctr: Number(((clicks / impressions) * 100).toFixed(2)),
+      cpc: Number((spent / (clicks || 1)).toFixed(2)),
+      roas: Number((1 + Math.random() * 4).toFixed(2))
+    },
+    history: [
+      {
+        date: start.toISOString(),
+        action: 'created',
+        changes: {}
+      }
+    ]
+  };
+});
+
+// Merge with original array
+campaigns = [...campaigns, ...extraCampaigns];
+
+let nextId = 36;
 
 // Utility functions
 const formatCurrency = (amount) => {
