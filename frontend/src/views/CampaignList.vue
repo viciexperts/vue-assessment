@@ -186,6 +186,15 @@ import ErrorAlert from '../components/ErrorAlert.vue';
 import StatusBadge from '../components/StatusBadge.vue';
 import PaginationControls from '../components/PaginationControls.vue';
 
+// ==============================
+// Config / constants
+// ==============================
+const DEFAULT_LIMIT = 10;
+const SEARCH_DEBOUNCE_MS = 250;
+const CREATED_BANNER_MS = 1800;
+
+
+
 const titleRef = ref(null);
 
 useRouteFocus(() => titleRef.value);
@@ -212,13 +221,13 @@ const errorMessage = computed(() =>
 const refresh = () => store.loadList({ page: pagination.value.page, limit: pagination.value.limit });
 
 const setPage = async (newPage) => {
-  const limit = pagination.value.limit || 10;
+  const limit = pagination.value.limit || DEFAULT_LIMIT;
   await store.loadList({ page: newPage, limit });
 };
 
 const applySearch = debounce(() => {
   search.value = searchDraft.value.trim();
-}, 250);
+}, SEARCH_DEBOUNCE_MS);
 
 watch(searchDraft, () => applySearch());
 
@@ -228,7 +237,7 @@ watch(
       if (route.query.created === '1') {
         window.setTimeout(() => {
           router.replace({ query: { ...route.query, created: undefined } });
-        }, 1800);
+        }, CREATED_BANNER_MS);
       }
     },
     { immediate: true }
