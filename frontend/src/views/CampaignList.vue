@@ -49,10 +49,29 @@
         </template>
       </ErrorAlert>
 
-      <div v-if="loading" class="loading-wrap">
-        <BaseSpinner label="Loading campaigns" />
-        <span class="loading-text">Loading campaigns…</span>
+      <div v-if="loading" class="skeleton-list" aria-label="Loading campaigns">
+        <article v-for="i in 6" :key="i" class="card skeleton-card" aria-hidden="true">
+          <div class="card-link">
+            <div class="card-top">
+              <SkeletonBlock height="18px" width="70%" />
+              <SkeletonBlock height="22px" width="92px" />
+            </div>
+
+            <dl class="card-meta">
+              <div class="card-meta-row">
+                <SkeletonBlock height="12px" width="60px" />
+                <SkeletonBlock height="14px" width="110px" />
+              </div>
+
+              <div class="card-meta-row">
+                <SkeletonBlock height="12px" width="50px" />
+                <SkeletonBlock height="14px" width="160px" />
+              </div>
+            </dl>
+          </div>
+        </article>
       </div>
+
 
       <div v-else>
         <div v-if="!filteredCampaigns.length" class="empty" role="status" aria-live="polite">
@@ -640,5 +659,15 @@ onMounted(async () => {
   }
 }
 
+.skeleton-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.skeleton-card {
+  pointer-events: none;
+  opacity: 0.95;
+}
 
 </style>

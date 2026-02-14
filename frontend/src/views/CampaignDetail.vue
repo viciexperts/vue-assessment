@@ -17,10 +17,74 @@
       </header>
 
       <!-- Loading -->
-      <div v-if="loading" class="loading-wrap" role="status" aria-live="polite">
-        <BaseSpinner />
-        <span class="loading-text">Loading campaign…</span>
+      <div v-if="loading" class="detail-skeleton" aria-label="Loading campaign">
+        <div class="title-row">
+          <SkeletonBlock height="26px" width="60%" />
+          <SkeletonBlock height="26px" width="110px" />
+        </div>
+
+        <div class="s-desc">
+          <SkeletonBlock height="12px" width="92%" />
+          <SkeletonBlock height="12px" width="85%" />
+        </div>
+
+        <div class="grid">
+          <article class="panel">
+            <h3 class="panel-title">Overview</h3>
+
+            <div class="s-rows">
+              <div class="s-row">
+                <SkeletonBlock height="12px" width="70px" />
+                <SkeletonBlock height="14px" width="120px" />
+              </div>
+              <div class="s-row">
+                <SkeletonBlock height="12px" width="55px" />
+                <SkeletonBlock height="14px" width="120px" />
+              </div>
+              <div class="s-row">
+                <SkeletonBlock height="12px" width="45px" />
+                <SkeletonBlock height="14px" width="180px" />
+              </div>
+              <div class="s-row">
+                <SkeletonBlock height="12px" width="110px" />
+                <SkeletonBlock height="14px" width="150px" />
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3 class="panel-title">Metrics</h3>
+
+            <div class="metrics">
+              <div class="metric">
+                <SkeletonBlock height="12px" width="90px" />
+                <SkeletonBlock height="18px" width="120px" />
+              </div>
+
+              <div class="metric">
+                <SkeletonBlock height="12px" width="70px" />
+                <SkeletonBlock height="18px" width="90px" />
+              </div>
+
+              <div class="metric">
+                <SkeletonBlock height="12px" width="105px" />
+                <SkeletonBlock height="18px" width="80px" />
+              </div>
+
+              <div class="metric">
+                <SkeletonBlock height="12px" width="55px" />
+                <SkeletonBlock height="18px" width="70px" />
+              </div>
+
+              <div class="metric">
+                <SkeletonBlock height="12px" width="55px" />
+                <SkeletonBlock height="18px" width="90px" />
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
+
 
       <!-- Error -->
       <ErrorAlert
@@ -122,7 +186,7 @@
 
 <script setup>
 import { getErrorMessage, getStatusCode } from '../utils/error';
-
+import SkeletonBlock from '../components/SkeletonBlock.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCampaignsStore } from '../stores/campaigns';
@@ -389,4 +453,30 @@ onMounted(load);
   border-color: var(--border);
   background: var(--surface-2);
 }
+
+.detail-skeleton {
+  display: grid;
+  gap: 12px;
+}
+
+.s-desc {
+  display: grid;
+  gap: 8px;
+  opacity: 0.9;
+}
+
+.s-rows {
+  display: grid;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.s-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+
 </style>

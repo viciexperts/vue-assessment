@@ -18,7 +18,52 @@
         </template>
       </ErrorAlert>
 
-      <form class="form" @submit.prevent="submit" novalidate>
+      <div v-if="loadingEdit" class="form-skeleton" aria-label="Loading campaign form">
+        <div class="form-skeleton-grid">
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="90px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="70px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="80px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="85px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="75px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field">
+            <SkeletonBlock height="12px" width="115px" />
+            <SkeletonBlock height="40px" width="100%" />
+          </div>
+
+          <div class="fs-field fs-wide">
+            <SkeletonBlock height="12px" width="90px" />
+            <SkeletonBlock height="110px" width="100%" />
+          </div>
+        </div>
+
+        <div class="form-skeleton-actions">
+          <SkeletonBlock height="40px" width="140px" />
+          <SkeletonBlock height="40px" width="110px" />
+        </div>
+      </div>
+
+
+      <form v-else class="form" @submit.prevent="submit" novalidate>
         <div class="grid">
           <FormField id="name" label="Name" :required="true" :error="errors.name">
             <input
@@ -140,8 +185,9 @@
 
 <script setup>
 import { getErrorMessage } from '../utils/error';
+import SkeletonBlock from '../components/SkeletonBlock.vue';
 
-import { computed, nextTick, onMounted, reactive, ref } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ErrorAlert from '../components/ErrorAlert.vue';
 import FormField from '../components/FormField.vue';
@@ -153,7 +199,12 @@ const route = useRoute();
 const router = useRouter();
 const store = useCampaignsStore();
 
+const routeId = computed(() => String(route.params.id ?? ''));
 const isEdit = computed(() => Boolean(route.params.id));
+// Track which campaign id has been loaded into the form. Until it matches routeId, show skeleton.
+const loadedId = ref(null);
+const loadingEdit = computed(() => isEdit.value && loadedId.value !== routeId.value);
+
 
 const nameRef = ref(null);
 
@@ -286,7 +337,10 @@ const submit = async () => {
 const loadForEdit = async () => {
   loadErrorMessage.value = '';
   if (!isEdit.value) return;
-
+  loadedId.value = null;
+  // Force skeleton to show immediately (even if store returns instantly)
+  // Ensure the skeleton renders at least one frame before awaiting the API/store
+  await nextTick();
   try {
     const campaign = await store.loadById(route.params.id);
 
@@ -311,7 +365,32 @@ const loadForEdit = async () => {
     loadErrorMessage.value =
         err?.response?.data?.message || err?.message || 'Unable to load campaign data.';
   }
+  finally {
+    // Mark this id as 'attempted/loaded' so skeleton can disappear (even on error)
+    loadedId.value = routeId.value;
+  }
 };
+
+// If this component instance is reused (same route/component) and the :id param changes,
+// reload the campaign and show the skeleton.
+watch(
+    () => route.params.id,
+    async (newId, oldId) => {
+      // When entering edit (or switching ids), reset loadedId first so the skeleton shows immediately
+      if (newId && newId !== oldId) {
+        loadedId.value = null;
+        await nextTick();
+        await loadForEdit();
+        return;
+      }
+
+      // If leaving edit mode, clear the loaded marker
+      if (!newId) {
+        loadedId.value = '';
+      }
+    },
+    { immediate: true, flush: 'sync' }
+);
 
 onMounted(async () => {
   if (!isEdit.value) {
@@ -319,8 +398,6 @@ onMounted(async () => {
     if (nameRef.value) nameRef.value.focus();
     return;
   }
-
-  await loadForEdit();
 });
 </script>
 
@@ -397,4 +474,40 @@ onMounted(async () => {
     grid-column: 1 / -1;
   }
 }
+.form-skeleton {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--surface);
+}
+
+.form-skeleton-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.fs-field {
+  display: grid;
+  gap: 8px;
+}
+
+.fs-wide {
+  grid-column: 1 / -1;
+}
+
+.form-skeleton-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 900px) {
+  .form-skeleton-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
 </style>
