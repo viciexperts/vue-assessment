@@ -171,6 +171,7 @@
 <script setup>
 
 import { useRouteFocus } from '../composables/useRouteFocus';
+import SkeletonBlock from '@/components/SkeletonBlock.vue'
 
 
 import { getErrorMessage } from '../utils/error';
@@ -181,10 +182,10 @@ import { useCampaignsStore } from '../stores/campaigns';
 import { debounce } from '../utils/debounce';
 import { formatCurrency, formatDate } from '../utils/format';
 
-import BaseSpinner from '../components/BaseSpinner.vue';
+//import BaseSpinner from '../components/BaseSpinner.vue';
 import ErrorAlert from '../components/ErrorAlert.vue';
 import StatusBadge from '../components/StatusBadge.vue';
-import PaginationControls from '../components/PaginationControls.vue';
+//import PaginationControls from '../components/PaginationControls.vue';
 
 // ==============================
 // Config / constants
