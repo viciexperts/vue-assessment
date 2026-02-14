@@ -148,6 +148,8 @@
 </template>
 
 <script setup>
+import { getErrorMessage } from '../utils/error';
+
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCampaignsStore } from '../stores/campaigns';
@@ -173,14 +175,10 @@ const loading = computed(() => store.listLoading);
 const error = computed(() => store.listError);
 const pagination = computed(() => store.pagination);
 
-const errorMessage = computed(() => {
-  const err = error.value;
-  if (!err) return '';
-  // api.js rejects with error.response.data, so err may already be { error: { message } }
-  if (err?.error?.message) return err.error.message;
-  if (err?.message) return err.message;
-  return 'Unexpected error. Please try again.';
-});
+const errorMessage = computed(() =>
+    error.value ? getErrorMessage(error.value) : ''
+);
+
 
 const refresh = () => store.loadList({ page: pagination.value.page, limit: pagination.value.limit });
 

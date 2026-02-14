@@ -139,6 +139,8 @@
 </template>
 
 <script setup>
+import { getErrorMessage } from '../utils/error';
+
 import { computed, nextTick, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ErrorAlert from '../components/ErrorAlert.vue';
@@ -275,10 +277,7 @@ const submit = async () => {
     await createCampaign(payload);
     router.push({ path: '/', query: { created: '1' } });
   } catch (err) {
-    submitError.value =
-        err?.response?.data?.message ||
-        err?.message ||
-        'Unable to submit the campaign. Please try again.';
+    submitError.value = getErrorMessage(err, 'Unable to submit the campaign.');
   } finally {
     submitting.value = false;
   }
@@ -370,32 +369,7 @@ onMounted(async () => {
   margin-top: 10px;
   color: rgba(255, 140, 140, 0.95);
 }
-/*
-.btn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.92);
-  border-radius: 12px;
-  padding: 10px 12px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  font-weight: 600;
-  font-size: 14px;
-}
-.btn:hover {
-  background: rgba(255, 255, 255, 0.09);
-}
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-.btn-ghost {
-  background: transparent;
-}*/
+
 
 .input {
   width: 100%;

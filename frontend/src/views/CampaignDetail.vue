@@ -121,6 +121,8 @@
 </template>
 
 <script setup>
+import { getErrorMessage, getStatusCode } from '../utils/error';
+
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCampaignsStore } from '../stores/campaigns';
@@ -142,11 +144,9 @@ const error = computed(() => store.detailError);
 
 const errorMessage = computed(() => {
   if (!error.value) return '';
-  if (error.value?.error?.message) return error.value.error.message;
-  if (error.value?.message) return error.value.message;
-  return 'Unexpected error';
+  if (getStatusCode(error.value) === 404) return '';
+  return getErrorMessage(error.value);
 });
-
 const load = async () => {
   try {
     campaign.value = await store.loadById(route.params.id);

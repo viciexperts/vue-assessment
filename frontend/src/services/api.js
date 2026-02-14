@@ -21,7 +21,7 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+/*
 // Response interceptor (optional - for error handling)
 api.interceptors.response.use(
   (response) => response.data,
@@ -38,6 +38,11 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
   }
+);*/
+api.interceptors.response.use(
+    (response) => response,
+    (error) => Promise.reject(error)
 );
+
 
 export default api;
